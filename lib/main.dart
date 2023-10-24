@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:viaja_plus/models/user_data.dart';
+import 'package:viaja_plus/screens/login.dart';
 import 'package:viaja_plus/screens/test_categoria.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,14 +20,26 @@ void main() async {
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return StreamProvider<Usuario?>.value(
+  //     value: AuthService().usuario,
+  //     initialData: null,
+  //     child: MaterialApp(
+  //       title: 'Educar Para Transformar',
+  //       debugShowCheckedModeBanner: false,
+  //       //scrollBehavior: ScrollBehavior(),
+  //       home: Welcome(),
+  //       navigatorKey: navigatorKey,
+  //     ),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Test(),
-        ),
-      ),
+      title: 'Viaja Plus',
+      home: Login(),
     );
   }
 }

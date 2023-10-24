@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   
+  provider: ^6.0.5
   supabase_flutter: ^1.10.22
 
 dev_dependencies:

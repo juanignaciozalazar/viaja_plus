@@ -13,8 +13,6 @@ class _TestState extends State<Test> {
 
   final formKey = GlobalKey<FormState>();
 
-  final supabase = SupabaseController();
-
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -40,7 +38,8 @@ class _TestState extends State<Test> {
                   context: context,
                   builder: (context) {
                     return FutureBuilder(
-                      future: supabase.agregarCategoria(controller.text),
+                      future:
+                          SupabaseController.agregarCategoria(controller.text),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           String mensaje = '';
