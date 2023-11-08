@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+<<<<<<< Updated upstream
 import 'package:viaja_plus/models/user_data.dart';
 import 'package:viaja_plus/screens/login.dart';
 import 'package:viaja_plus/screens/test_categoria.dart';
 import 'package:provider/provider.dart';
+=======
+import 'package:viaja_plus/screens/home.dart';
+//import 'package:viaja_plus/screens/test_categoria.dart';
+>>>>>>> Stashed changes
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,8 +43,14 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+<<<<<<< Updated upstream
       title: 'Viaja Plus',
       home: Login(),
+=======
+      debugShowCheckedModeBanner: false,
+      home: Home(),
+      title: "Viaja Plus",
+>>>>>>> Stashed changes
     );
   }
 }
