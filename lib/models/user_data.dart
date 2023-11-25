@@ -1,15 +1,9 @@
-class UserData {
-  String uid;
-  String email;
-  String nombre;
-  String apellido;
-  DateTime? fechaNacimiento;
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:viaja_plus/models/user_profile.dart';
 
-  UserData({
-    required this.uid,
-    required this.email,
-    required this.nombre,
-    required this.apellido,
-    this.fechaNacimiento,
-  });
+class UserData {
+  User user;
+  UserProfile? profile;
+
+  UserData({required this.user, this.profile});
 }

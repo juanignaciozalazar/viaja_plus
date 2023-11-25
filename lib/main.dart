@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:viaja_plus/screens/home.dart';
+import 'package:viaja_plus/screens/home/home.dart';
+import 'package:viaja_plus/services/auth.dart';
+
+import 'models/user_data.dart';
 //import 'package:viaja_plus/screens/test_categoria.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,27 +24,26 @@ void main() async {
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return StreamProvider<Usuario?>.value(
-  //     value: AuthService().usuario,
-  //     initialData: null,
-  //     child: MaterialApp(
-  //       title: 'Educar Para Transformar',
-  //       debugShowCheckedModeBanner: false,
-  //       //scrollBehavior: ScrollBehavior(),
-  //       home: Welcome(),
-  //       navigatorKey: navigatorKey,
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Home(),
-      title: "Viaja Plus",
+    return StreamProvider<UserData?>.value(
+      value: AuthService().userData,
+      initialData: null,
+      child: MaterialApp(
+        title: 'Viaja Plus',
+        //scrollBehavior: ScrollBehavior(),
+        home: const Home(),
+        navigatorKey: navigatorKey,
+      ),
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return const MaterialApp(
+  //     debugShowCheckedModeBanner: false,
+  //     home: Home(),
+  //     title: "Viaja Plus",
+  //   );
+  // }
 }

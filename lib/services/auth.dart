@@ -1,57 +1,53 @@
+import 'dart:async';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:viaja_plus/models/user_data.dart';
+import 'package:viaja_plus/models/user_profile.dart';
 
 class AuthService {
   static final supabase = Supabase.instance.client;
 
-  static Future<bool> signUp(String email, String password, String name,
-      String surname, String role, DateTime? birthDate) async {
+  static final StreamController<UserData?> _userChangeController =
+      StreamController.broadcast();
+
+  Stream<UserData?> get userData {
+    _refreshUserData();
+    return _userChangeController.stream;
+  }
+
+  static Future<bool> signUp(String email, String password) async {
     try {
       final response = await supabase.auth.signUp(
         email: email,
         password: password,
       );
       if (response.user != null) {
-        try {
-          final creationResponse = await _createUserData(
-              response.user!, name, surname, role, birthDate);
-          if (creationResponse) {
-            print('Exito creando los datos del usuario');
-            return true;
-          } else {
-            print('No se pudo crear los datos del usuario');
-            return false;
-          }
-        } catch (ex) {
-          print('Ocurrio un error creando los datos del usuario');
-          await supabase
-              .from('auth.users')
-              .delete()
-              .eq('id', response.user!.id);
-          return false;
-        }
+        _userChangeController.add(await _buildUserData(response.user));
+        return true;
       } else {
         print('Ocurrio un error creando el usuario');
         return false;
       }
     } catch (ex) {
-      print(ex);
+      print(ex.toString());
       return false;
     }
   }
 
-  static Future<bool> _createUserData(User user, String name, String surname,
-      String role, DateTime? birthDate) async {
+  static Future<bool> createUserProfile(UserData userData, String name,
+      String surname, String role, DateTime? birthDate) async {
     try {
       final response = await supabase.from('usuario').insert({
-        'uid': user.id,
-        'email': user.email,
+        'uid': userData.user.id,
+        'email': userData.user.email,
         'nombre': name,
         'apellido': surname,
         'rol': role,
         'fecha_nacimiento': birthDate,
       });
       if (response != null) {
+        userData.profile = await _buildUserProfile(userData.user);
+        _userChangeController.add(userData);
         return true;
       } else {
         return false;
@@ -67,37 +63,74 @@ class AuthService {
           .signInWithPassword(email: email, password: password);
       if (response.user != null) {
         print(response.user!.id);
-        var x = await _buildUser(response.user!);
-        print(x);
+        var userDataResponse = await _buildUserData(response.user);
+        print(userDataResponse);
+        _userChangeController.add(userDataResponse);
         return true;
       } else {
+        _userChangeController.add(null);
         return false;
       }
     } catch (ex) {
       print(ex);
+      _userChangeController.add(null);
       return false;
     }
   }
 
-  static Future<UserData?> _buildUser(User user) async {
-    // final data = await supabase.from('usuario').select<Map<String, dynamic>>('''
-    //     uid,
-    //     email,
-    //     nombre,
-    //     apellido,
-    //     fecha_nacimiento,
-    //     rol
-    //   ''').eq('uid', user.id).single();
+  static void signOut() {
+    supabase.auth.signOut().whenComplete(
+      () {
+        _userChangeController.add(null);
+      },
+    );
+  }
+
+  static Future<UserData?> _buildUserData(User? user) async {
+    if (user != null) {
+      return UserData(
+        user: user,
+        profile: await _buildUserProfile(user),
+      );
+    } else {
+      return null;
+    }
+  }
+
+  static Future<UserProfile?> _buildUserProfile(User user) async {
+    // try {
     final data = await supabase
-        .from('usuario')
+        .from('perfil')
         .select<Map<String, dynamic>>()
         .eq('uid', user.id)
         .single();
-    print(data);
+
     if (data.isNotEmpty) {
-      for (var a in data.keys) {
-        print(a);
-      }
+      print(data['rol']);
+      return UserProfile(
+        name: data['nombre'],
+        surname: data['apellido'],
+        birthDate: data['fecha_nacimiento'],
+        role: UserRoles.values.firstWhere(
+          (element) => element.name == data['rol'],
+          orElse: () => UserRoles.cliente,
+        ),
+      );
+    } else {
+      print('El usuario no tiene un perfil creado');
+      return null;
+    }
+    // } catch (ex) {
+    //   print('Ocurrio un error obteniendo los datos del usuario');
+    //   return null;
+    // }
+  }
+
+  void _refreshUserData() async {
+    if (supabase.auth.currentUser != null) {
+      _userChangeController.add(
+        await _buildUserData(supabase.auth.currentUser),
+      );
     }
   }
 }

@@ -56,7 +56,7 @@ class _TestState extends State<Test> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text('Aceptar'),
+                                child: const Text('Aceptar'),
                               ),
                             ],
                           );
