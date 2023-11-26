@@ -2,8 +2,10 @@
 //Agregar mas si es necesario
 import 'package:flutter/material.dart';
 
+
 const Color verdigris = Color(0xff56a3a6);
 const Color blackOlive = Color(0xff484538);
+const Color blackOliveDarker = Color(0xff29271F);
 const Color sage = Color(0xffCAD49D);
 const Color teaGreen = Color(0xffD4EAC8);
 const Color columbiaBlue = Color(0xffC0D8E0);
@@ -24,4 +26,10 @@ const TextStyle textoBotones = TextStyle(
   color: sage,
   fontSize: 20,
   fontWeight: FontWeight.w400
+);
+
+const TextStyle textoAlterno = TextStyle(
+  color: blackOliveDarker,
+  fontSize: 20,
+  fontWeight: FontWeight.w400 
 );
