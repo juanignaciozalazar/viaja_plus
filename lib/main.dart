@@ -32,7 +32,7 @@ class MainApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Viaja Plus',
         //scrollBehavior: ScrollBehavior(),
-        home: const Home(),
+        home: Home(),
         navigatorKey: navigatorKey,
       ),
     );
