@@ -16,22 +16,23 @@ class AuthService {
   }
 
   static Future<bool> signUp(String email, String password) async {
-    try {
-      final response = await supabase.auth.signUp(
-        email: email,
-        password: password,
-      );
-      if (response.user != null) {
-        _userChangeController.add(await _buildUserData(response.user));
-        return true;
-      } else {
-        print('Ocurrio un error creando el usuario');
-        return false;
-      }
-    } catch (ex) {
-      print(ex.toString());
+    // try {
+    final response = await supabase.auth.signUp(
+      email: email,
+      password: password,
+    );
+    if (response.user != null) {
+      var buildResponse = await _buildUserData(response.user);
+      _userChangeController.add(buildResponse);
+      return true;
+    } else {
+      print('Ocurrio un error creando el usuario');
       return false;
     }
+    // } catch (ex) {
+    //   print(ex.toString());
+    //   return false;
+    // }
   }
 
   static Future<bool> createUserProfile(UserData userData, String name,
@@ -101,16 +102,20 @@ class AuthService {
     // try {
     final data = await supabase
         .from('perfil')
-        .select<Map<String, dynamic>>()
+        .select<Map<String, dynamic>?>()
         .eq('uid', user.id)
-        .single();
+        .maybeSingle();
 
-    if (data.isNotEmpty) {
+    if (data != null && data.isNotEmpty) {
       print(data['rol']);
+      print(data['fecha_nacimiento']);
       return UserProfile(
         name: data['nombre'],
         surname: data['apellido'],
-        birthDate: data['fecha_nacimiento'],
+        birthDate:
+            (data['fecha_nacimiento'] == '' || data['fecha_nacimiento'] == null)
+                ? null
+                : DateTime.parse(data['fecha_nacimiento']),
         role: UserRoles.values.firstWhere(
           (element) => element.name == data['rol'],
           orElse: () => UserRoles.cliente,

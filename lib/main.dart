@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:viaja_plus/screens/home/home.dart';
+import 'package:viaja_plus/screens/login.dart';
+import 'package:viaja_plus/screens/signup.dart';
 import 'package:viaja_plus/services/auth.dart';
 
 import 'models/user_data.dart';

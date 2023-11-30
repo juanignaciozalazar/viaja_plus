@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:viaja_plus/Util/styles.dart';
 import 'package:viaja_plus/models/user_profile.dart';
+import 'package:viaja_plus/screens/bus_maintenance.dart';
+import 'package:viaja_plus/screens/signup.dart';
 import 'package:viaja_plus/services/auth.dart';
 
 import '../../models/user_data.dart';
@@ -31,47 +33,18 @@ class _HomeAppBarState extends State<HomeAppBar> {
               Navigator.push<void>(
                 context,
                 MaterialPageRoute<void>(
-                  builder: (BuildContext context) => const BookTickets(),
-                ),
-              ),
-            },
-            child: const Text(
-              "Reservar Pasajes",
-              style: textoBotones,
-            ),
-          ),
-          TextButton(
-            onPressed: () => {
-              Navigator.push<void>(
-                context,
-                MaterialPageRoute<void>(
-                  builder: (BuildContext context) => const BookTickets(),
+                  builder: (BuildContext context) => const BusMaintenance(),
                 ),
               ),
             },
             child: const Text("Mantenimiento de Unidades", style: textoBotones),
           ),
-          (user == null)
-              ? TextButton(
-                  style: ButtonStyle(
-                    textStyle: MaterialStateProperty.all(
-                      TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  onPressed: () => Navigator.push<void>(
-                    context,
-                    MaterialPageRoute<void>(
-                      builder: (BuildContext context) => const Login(),
-                    ),
-                  ),
-                  child: const Text('Iniciar Sesión'),
-                )
-              : TextButton(
-                  onPressed: () {
-                    AuthService.signOut();
-                  },
-                  child: const Text('Cerrar Sesión'),
-                )
+          TextButton(
+            onPressed: () {
+              AuthService.signOut();
+            },
+            child: const Text('Cerrar Sesión'),
+          )
         ],
       );
     }
@@ -90,6 +63,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
           ]),
         ),
         actions: [
+          //
           TextButton(
             onPressed: () => {
               Navigator.push<void>(
@@ -104,17 +78,21 @@ class _HomeAppBarState extends State<HomeAppBar> {
               style: textoBotones,
             ),
           ),
-          TextButton(
-            onPressed: () => {
-              Navigator.push<void>(
-                context,
-                MaterialPageRoute<void>(
-                  builder: (BuildContext context) => const BookTickets(),
-                ),
-              ),
-            },
-            child: const Text("Mantenimiento de Unidades", style: textoBotones),
-          ),
+
+          // Boton de registro
+          (user == null)
+              ? TextButton(
+                  onPressed: () => Navigator.push<void>(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (BuildContext context) => const Signup(),
+                    ),
+                  ),
+                  child: const Text('Registrarse'),
+                )
+              : const SizedBox(),
+
+          // Boton de inicio/cierre sesion
           (user == null)
               ? TextButton(
                   onPressed: () => Navigator.push<void>(
