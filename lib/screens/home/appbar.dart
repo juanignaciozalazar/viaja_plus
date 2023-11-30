@@ -37,7 +37,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
                 ),
               ),
             },
-            child: const Text("Mantenimiento de Unidades", style: textoBotones),
+            child: const Text('Mantenimiento de Unidades', style: textoBotones),
           ),
           TextButton(
             onPressed: () {
@@ -78,7 +78,6 @@ class _HomeAppBarState extends State<HomeAppBar> {
               style: textoBotones,
             ),
           ),
-
           // Boton de registro
           (user == null)
               ? TextButton(
@@ -101,7 +100,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
                       builder: (BuildContext context) => const Login(),
                     ),
                   ),
-                  child: const Text('Ingresar'),
+                  child: const Text('Ingresar', style: textoBotones),
                 )
               : TextButton(
                   onPressed: () {
